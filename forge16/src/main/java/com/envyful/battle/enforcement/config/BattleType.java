@@ -39,7 +39,7 @@ public class BattleType extends AbstractYamlConfig {
         return this.requiredPokemon;
     }
 
-    private BattleRules createRules() {
+    public BattleRules createRules() {
         BattleRules battleRules = new BattleRules().set(BattleRuleRegistry.BATTLE_TYPE, com.pixelmonmod.pixelmon.api.battles.BattleType.SINGLE);
         Set<BattleClause> clauses = Sets.newHashSet();
 

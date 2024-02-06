@@ -8,13 +8,19 @@ import com.envyful.api.forge.platform.ForgePlatformHandler;
 import com.envyful.api.forge.player.ForgePlayerManager;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.platform.PlatformProxy;
+import com.envyful.battle.enforcement.command.BattleStartCommand;
+import com.envyful.battle.enforcement.command.BattleTypeTabCompleter;
 import com.envyful.battle.enforcement.config.BattleEnforcementConfig;
+import com.envyful.battle.enforcement.config.BattleType;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.List;
 
 @Mod(BattleEnforcement.MOD_ID)
 public class BattleEnforcement {
@@ -54,7 +60,31 @@ public class BattleEnforcement {
         }
     }
 
+    @SubscribeEvent
+    public void registerCommands(RegisterCommandsEvent event) {
+        this.commandFactory.registerCompleter(new BattleTypeTabCompleter());
+        this.commandFactory.registerInjector(BattleType.class, (sender, args) -> {
+            var aura = this.config.typeFromId(args[0]);
+
+            if (aura == null) {
+                PlatformProxy.sendMessage(sender, List.of("&c&l(!) &cNo type found with ID!"));
+            }
+
+            return aura;
+        });
+
+        this.commandFactory.registerCommand(event.getDispatcher(), this.commandFactory.parseCommand(new BattleStartCommand()));
+    }
+
+    public static BattleEnforcement getInstance() {
+        return instance;
+    }
+
     public static Logger getLogger() {
         return LOGGER;
+    }
+
+    public static BattleEnforcementConfig getConfig() {
+        return instance.config;
     }
 }
