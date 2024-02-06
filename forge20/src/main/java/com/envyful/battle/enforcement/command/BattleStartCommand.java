@@ -15,7 +15,7 @@ import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import com.pixelmonmod.pixelmon.battles.api.BattleBuilder;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
-import net.minecraft.command.ICommandSource;
+import net.minecraft.commands.CommandSource;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ import java.util.List;
 public class BattleStartCommand {
 
     @CommandProcessor
-    public void onCommand(@Sender ICommandSource source,
+    public void onCommand(@Sender CommandSource source,
                           @Completable(BattleTypeTabCompleter.class) @Argument BattleType type,
                           @Completable (PlayerTabCompleter.class) @Argument ForgeEnvyPlayer targetOne,
                           @Completable (PlayerTabCompleter.class) @Argument ForgeEnvyPlayer targetTwo) {
