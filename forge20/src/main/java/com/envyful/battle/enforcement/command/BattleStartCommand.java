@@ -9,11 +9,16 @@ import com.envyful.api.command.annotate.executor.Sender;
 import com.envyful.api.command.annotate.permission.Permissible;
 import com.envyful.api.forge.command.completion.player.PlayerTabCompleter;
 import com.envyful.api.forge.player.ForgeEnvyPlayer;
+import com.envyful.api.forge.server.UtilForgeServer;
 import com.envyful.api.platform.PlatformProxy;
+import com.envyful.api.text.Placeholder;
 import com.envyful.battle.enforcement.config.BattleType;
+import com.pixelmonmod.pixelmon.api.battles.BattleResults;
+import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import com.pixelmonmod.pixelmon.battles.api.BattleBuilder;
+import com.pixelmonmod.pixelmon.battles.api.rules.teamselection.TeamSelectionRegistry;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
 import net.minecraft.commands.CommandSource;
 
@@ -57,14 +62,37 @@ public class BattleStartCommand {
             return;
         }
 
+        partyOne.heal();
+        partyTwo.heal();
+
+        var rules = type.createRules();
+
         BattleBuilder.builder()
-                .rules(type.createRules())
+                .rules(rules)
                 .teamSelection(false)
                 .teamOne(new PlayerParticipant(targetOne.getParent(), partyOne.getAll()))
                 .teamTwo(new PlayerParticipant(targetTwo.getParent(), partyTwo.getAll()))
                 .disableExp()
                 .allowSpectators()
-                .start();
+                .teamSelection(type.showTeamSelect())
+                .teamSelectionBuilder(TeamSelectionRegistry.builder().battleRules(rules).showRules(false).hideOpponentTeam().notCloseable())
+                .start().whenComplete((battleController, throwable) -> {
+                    PlatformProxy.executeConsoleCommands(type.getStartCommands(),
+                            Placeholder.simple("%player_one%", targetOne.getName()),
+                            Placeholder.simple("%player_two%", targetTwo.getName()));
+
+                    battleController.addTaskAtEvent(BattleEndEvent.class, (event, controller) -> {
+                        var finishCommands = type.finishCommands();
+                        var winner = event.getResult(targetOne.getParent()).orElseThrow() == BattleResults.VICTORY ? targetOne : targetTwo;
+                        var loser = event.getResult(targetTwo.getParent()).orElseThrow() == BattleResults.VICTORY ? targetOne : targetTwo;
+
+                        for (var command : finishCommands.getRandomRewards()) {
+                            PlatformProxy.executeConsoleCommands(command.getCommands(),
+                                    Placeholder.simple("%winner%",  winner.getName()),
+                                    Placeholder.simple("%loser%", loser.getName()));
+                        }
+                    });
+                });
     }
 
     private boolean isPartyValid(BattleType type, PlayerPartyStorage party) {
