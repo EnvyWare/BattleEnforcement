@@ -4,7 +4,7 @@ plugins {
 }
 
 forgeVersion = "1.20.2"
-java.toolchain.languageVersion = JavaLanguageVersion.of(11)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
     mappings channel: 'official', version: '1.20.2'
@@ -15,7 +15,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {}
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.2.39'
+    minecraft 'net.minecraftforge:forge:1.20.2-48.1.0'
 
     implementation 'pixelmon:Pixelmon-1.20.2-9.2.5-server:9.2.5'
     shadow group: 'org.spongepowered', name: 'configurate-yaml', version: '4.2.0-COMMENTS'
