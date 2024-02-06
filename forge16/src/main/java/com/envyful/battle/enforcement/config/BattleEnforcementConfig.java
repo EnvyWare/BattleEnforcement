@@ -4,6 +4,8 @@ import com.envyful.api.config.data.ConfigPath;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.envyful.api.config.yaml.DefaultConfig;
 import com.envyful.api.config.yaml.YamlConfigFactory;
+import com.envyful.api.forge.config.ConfigReward;
+import com.envyful.api.forge.config.ConfigRewardPool;
 import com.envyful.api.reforged.battle.ConfigBattleRule;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
@@ -25,6 +27,9 @@ public class BattleEnforcementConfig extends AbstractYamlConfig {
                                 .requiredPokemon(6)
                                 .addBlacklistPokemon("mewtwo")
                                 .addRule(new ConfigBattleRule("FullHeal", "true"))
+                                .showTeamSelect()
+                                .addStartCommand("broadcast %player_one% and %player_two% are battling!")
+                                .finishCommands(ConfigRewardPool.builder(ConfigReward.builder().commands(List.of("broadcast %winner% beat %loser%")).build()).build())
                         .build()));
     }
 
