@@ -49,6 +49,7 @@ shadowJar {
     relocate('reactor', 'com.envyful.battle.enforcement.shade.reactor')
     relocate('com.mysql', 'com.envyful.battle.enforcement.shade.mysql')
 
+    exclude 'org/apache/logging/**'
     exclude "com/google/**"
     exclude "javax/**"
     exclude "**/module-info.class"
