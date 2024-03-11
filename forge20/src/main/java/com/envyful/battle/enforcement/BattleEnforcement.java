@@ -6,6 +6,7 @@ import com.envyful.api.forge.command.ForgeCommandFactory;
 import com.envyful.api.forge.gui.factory.ForgeGuiFactory;
 import com.envyful.api.forge.platform.ForgePlatformHandler;
 import com.envyful.api.forge.player.ForgePlayerManager;
+import com.envyful.api.forge.player.util.UtilPlayer;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.platform.PlatformProxy;
 import com.envyful.battle.enforcement.command.BattleStartCommand;
@@ -46,6 +47,10 @@ public class BattleEnforcement {
         GuiFactory.setPlatformFactory(new ForgeGuiFactory());
 
         MinecraftForge.EVENT_BUS.register(this);
+
+        UtilPlayer.registerPermission("battle.enforce.start");
+        UtilPlayer.registerPermission("battle.enforce.reload");
+
     }
 
     @SubscribeEvent
