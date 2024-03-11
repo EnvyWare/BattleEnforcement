@@ -15,5 +15,4 @@ plugins {
 }
 
 rootProject.name = 'BattleEnforcement'
-include 'forge16',
-        'forge20'
+include 'forge16', 'forge20'

@@ -9,6 +9,7 @@ import com.envyful.api.forge.player.ForgePlayerManager;
 import com.envyful.api.forge.player.util.UtilPlayer;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.platform.PlatformProxy;
+import com.envyful.battle.enforcement.command.BattleSpectateCommand;
 import com.envyful.battle.enforcement.command.BattleStartCommand;
 import com.envyful.battle.enforcement.command.BattleTypeTabCompleter;
 import com.envyful.battle.enforcement.config.BattleEnforcementConfig;
@@ -80,6 +81,7 @@ public class BattleEnforcement {
         });
 
         this.commandFactory.registerCommand(event.getDispatcher(), this.commandFactory.parseCommand(new BattleStartCommand()));
+        this.commandFactory.registerCommand(event.getDispatcher(), this.commandFactory.parseCommand(new BattleSpectateCommand()));
     }
 
     public static BattleEnforcement getInstance() {
