@@ -88,6 +88,8 @@ public class BattleStartCommand {
                         for (var command : finishCommands.getRandomRewards()) {
                             PlatformProxy.executeConsoleCommands(command.getCommands(),
                                     Placeholder.simple("%winner%",  winner.getName()),
+                                    Placeholder.simple("%winner_pokemon_count%", String.valueOf(StorageProxy.getParty(winner.getParent()).countAblePokemon())),
+                                    Placeholder.simple("%loser_pokemon_count%", String.valueOf(StorageProxy.getParty(loser.getParent()).countAblePokemon())),
                                     Placeholder.simple("%loser%", loser.getName()));
                         }
                     });
