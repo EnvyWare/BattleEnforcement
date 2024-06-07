@@ -16,9 +16,10 @@ import com.envyful.battle.enforcement.config.BattleEnforcementConfig;
 import com.envyful.battle.enforcement.config.BattleType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.server.ServerAboutToStartEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -48,14 +49,11 @@ public class BattleEnforcement {
         GuiFactory.setPlatformFactory(new ForgeGuiFactory());
 
         MinecraftForge.EVENT_BUS.register(this);
-
-        UtilPlayer.registerPermission("battle.enforce.start");
-        UtilPlayer.registerPermission("battle.enforce.reload");
-
     }
 
     @SubscribeEvent
-    public void onServerStarting(FMLDedicatedServerSetupEvent event) {
+    public void onServerStarting(ServerAboutToStartEvent event) {
+        LOGGER.info("Loading config...");
         this.reloadConfig();
     }
 
