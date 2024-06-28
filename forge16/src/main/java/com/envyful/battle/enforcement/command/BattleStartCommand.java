@@ -74,7 +74,7 @@ public class BattleStartCommand {
                 .disableExp()
                 .allowSpectators()
                 .teamSelection(type.showTeamSelect())
-                .teamSelectionBuilder(TeamSelectionRegistry.builder().battleRules(rules).showRules(false).hideOpponentTeam().notCloseable())
+                .teamSelectionBuilder(TeamSelectionRegistry.builder().battleRules(rules).showRules(false).notCloseable())
                 .start().whenComplete((battleController, throwable) -> {
                     PlatformProxy.executeConsoleCommands(type.getStartCommands(),
                             Placeholder.simple("%player_one%", targetOne.getName()),
